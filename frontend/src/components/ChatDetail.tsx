@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+import Spinner from '@mui/material/CircularProgress';
+
 import styled from 'styled-components';
 
 import { Chat } from '../types/chat';
 
 interface Props {
+  isLoading: boolean;
   chatInfo: Chat;
   onMessageSend: (message: string) => void;
 }
 
-const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
+const ChatDetail: React.FC<Props> = ({ isLoading, chatInfo, onMessageSend }) => {
   const [message, setMessage] = useState('');
   const ref = useRef<HTMLUListElement>(null);
 
@@ -34,6 +37,7 @@ const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
     if (!message.trim()) return;
     onMessageSend(message);
     setMessage('');
+    if (ref.current) ref.current.scrollTop = ref.current.scrollHeight + 50;
   };
 
   return (
@@ -45,10 +49,19 @@ const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
             {i % 2 === 0 ? (
               <UserMessage>{v.contents}</UserMessage>
             ) : (
-              <BotMessage>{v.contents}</BotMessage>
+              <BotMessage>
+                {v.contents.split('\n').map((line, index) => (
+                  <p key={index}>{line}</p>
+                ))}
+              </BotMessage>
             )}
           </div>
         ))}
+        {isLoading && (
+          <Loading>
+            <Spinner />
+          </Loading>
+        )}
       </MessageList>
       <InputWrapper>
         <StyledInput
@@ -102,6 +115,17 @@ const EmptyList = styled.h2`
   margin: 0;
 `;
 
+const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px !important;
+  & span {
+    width: 24px !important;
+    height: 24px !important;
+  }
+`;
+
 const UserMessage = styled.li`
   width: fit-content;
   max-width: 80%;
@@ -117,6 +141,9 @@ const BotMessage = styled.li`
   padding: 16px;
   background: #f9f9f9;
   border-radius: 12px;
+  & p {
+    margin: 0;
+  }
 `;
 
 const InputWrapper = styled.div`

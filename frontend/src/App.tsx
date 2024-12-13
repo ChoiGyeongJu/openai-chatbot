@@ -5,6 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import styled from 'styled-components';
 
+import { fetchOpenAIResponse } from './common/api';
 import { ChatDetail, LNB } from './components';
 import { Chat } from './types/chat';
 
@@ -13,6 +14,7 @@ const ChatApp: React.FC = () => {
   const { chatId } = useParams();
 
   const [isLnbOpen, setIsLnbOpen] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [chatList, setChatList] = useState<Chat[]>([]);
   const [chatInfo, setChatInfo] = useState<Chat>({
     id: -1,
@@ -21,6 +23,26 @@ const ChatApp: React.FC = () => {
 
   const toggleLnb = () => {
     setIsLnbOpen(!isLnbOpen);
+  };
+
+  const handleFetchResponse = async (message: string, messageList: Chat[]) => {
+    const currentChat = messageList.find(v => v.id === Number(chatId));
+    if (!currentChat) return;
+
+    try {
+      setIsLoading(true);
+      const response = await fetchOpenAIResponse(message);
+      currentChat.messages.push({ contents: response });
+      setChatInfo(currentChat);
+      setChatList(messageList);
+      localStorage.setItem('messageList', JSON.stringify(messageList));
+    } catch (error) {
+      currentChat.messages.push({
+        contents: '응답을 받아오는 중 에러가 발생했습니다. 다시 요청해주세요.',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSendMessage = (message: string) => {
@@ -42,9 +64,7 @@ const ChatApp: React.FC = () => {
         setChatInfo(currentChat);
       }
     }
-
-    setChatList(messageList);
-    localStorage.setItem('messageList', JSON.stringify(messageList));
+    handleFetchResponse(message, messageList);
   };
 
   useEffect(() => {
@@ -77,7 +97,7 @@ const ChatApp: React.FC = () => {
           <MenuIcon />
         </ToggleButton>
       )}
-      <ChatDetail chatInfo={chatInfo} onMessageSend={handleSendMessage} />
+      <ChatDetail isLoading={isLoading} chatInfo={chatInfo} onMessageSend={handleSendMessage} />
     </Wrapper>
   );
 };
