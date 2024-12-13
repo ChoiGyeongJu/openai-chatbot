@@ -51,6 +51,7 @@ const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, toggleLnb }) => {
               </ChatItem>
             ))}
           </ChatList>
+          {chatList.length === 0 && <EmptyList>진행중인 채팅방이 없습니다.</EmptyList>}
         </>
       )}
     </LnbWrapper>
@@ -92,10 +93,16 @@ const ChatList = styled.ul`
   display: flex;
   flex-direction: column;
   padding: 0;
-
   :hover {
     background: #e3e3e3;
   }
+`;
+
+const EmptyList = styled.div`
+  margin: auto;
+  padding-bottom: 40px;
+  font-size: 14px;
+  word-break: keep-all;
 `;
 
 const ChatItem = styled.li<{ isActive: boolean }>`

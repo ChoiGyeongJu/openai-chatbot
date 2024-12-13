@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -6,15 +6,17 @@ import { Chat } from '../types/chat';
 
 interface Props {
   chatInfo: Chat;
-  onMessageSend?: (message: string) => void;
+  onMessageSend: (message: string) => void;
 }
 
 const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
   const [message, setMessage] = useState('');
+  const ref = useRef<HTMLUListElement>(null);
 
-  // 채팅방 변경 시 입력값 초기화
+  // 채팅방 변경 시 입력값 초기화 및 스크롤 아래로 이동
   useEffect(() => {
     setMessage('');
+    if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
   }, [chatInfo.id]);
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -29,15 +31,14 @@ const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
   };
 
   const handleSendMessage = () => {
-    if (message.trim()) {
-      onMessageSend?.(message);
-      setMessage('');
-    }
+    if (!message.trim()) return;
+    onMessageSend(message);
+    setMessage('');
   };
 
   return (
     <Wrapper>
-      <MessageList>
+      <MessageList ref={ref}>
         {chatInfo.messages.length === 0 && <EmptyList>무엇을 도와드릴까요?</EmptyList>}
         {chatInfo.messages.map((v, i) => (
           <div key={i}>
@@ -50,8 +51,13 @@ const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
         ))}
       </MessageList>
       <InputWrapper>
-        <StyledInput value={message} onChange={handleMessageChange} onKeyDown={handleKeyDown} />
-        <SendButton onClick={handleSendMessage}>보내기</SendButton>
+        <StyledInput
+          placeholder="메시지를 입력하세요."
+          value={message}
+          onChange={handleMessageChange}
+          onKeyDown={handleKeyDown}
+        />
+        <SendButton onClick={handleSendMessage}>전송</SendButton>
       </InputWrapper>
     </Wrapper>
   );
@@ -68,13 +74,25 @@ const Wrapper = styled.div`
 `;
 
 const MessageList = styled.ul`
-  width: min(70%, 768px);
+  width: 100%;
   height: calc(100vh - 135px);
   overflow-y: auto;
   padding: 12px 36px;
   place-content: end;
   & div {
-    margin: 8px 0;
+    margin: 8px auto;
+    width: min(70%, 768px);
+  }
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    opacity: 1;
+    background-color: #bdbdbd;
   }
 `;
 
@@ -86,7 +104,7 @@ const EmptyList = styled.h2`
 
 const UserMessage = styled.li`
   width: fit-content;
-  max-width: 100%;
+  max-width: 80%;
   padding: 16px;
   background: #f9f9f9;
   border-radius: 12px;
@@ -95,7 +113,7 @@ const UserMessage = styled.li`
 
 const BotMessage = styled.li`
   width: fit-content;
-  max-width: 100%;
+  max-width: 80%;
   padding: 16px;
   background: #f9f9f9;
   border-radius: 12px;
@@ -105,8 +123,8 @@ const InputWrapper = styled.div`
   width: min(70%, 768px);
   display: flex;
   align-items: center;
-  margin-top: 12px;
   justify-content: space-between;
+  margin-top: 12px;
 `;
 
 const StyledInput = styled.textarea`
@@ -118,6 +136,7 @@ const StyledInput = styled.textarea`
   font-size: 16px;
   padding: 6px 12px;
   line-height: 28px;
+  margin: 0 auto;
 `;
 
 const SendButton = styled.button`

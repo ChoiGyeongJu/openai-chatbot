@@ -48,10 +48,13 @@ const ChatApp: React.FC = () => {
   };
 
   useEffect(() => {
-    // 초기 chatList 세팅
+    // 초기 세팅
     const data = localStorage.getItem('messageList');
     const messageList: Chat[] = data ? JSON.parse(data) : [];
     setChatList(messageList);
+
+    const chat = messageList.find(v => v.id === Number(chatId));
+    if (chat) setChatInfo(chat);
   }, []);
 
   useEffect(() => {
