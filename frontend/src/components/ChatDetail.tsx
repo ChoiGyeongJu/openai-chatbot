@@ -2,29 +2,20 @@ import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
+import { Chat } from '../types/chat';
+
 interface Props {
-  chatId?: number;
-  chatInfo?: any;
+  chatInfo: Chat;
   onMessageSend?: (message: string) => void;
 }
 
-const Mockdata = {
-  id: 1,
-  title: 'Chat with GPT',
-  messages: [
-    { contents: 'Hello!' },
-    { contents: 'Hi, how can I help you today?' },
-    { contents: 'Tell me a joke!' },
-  ],
-};
-
-const ChatDetail: React.FC<Props> = ({ chatId, chatInfo, onMessageSend }) => {
+const ChatDetail: React.FC<Props> = ({ chatInfo, onMessageSend }) => {
   const [message, setMessage] = useState('');
 
   // 채팅방 변경 시 입력값 초기화
   useEffect(() => {
     setMessage('');
-  }, [chatId]);
+  }, [chatInfo.id]);
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -47,7 +38,8 @@ const ChatDetail: React.FC<Props> = ({ chatId, chatInfo, onMessageSend }) => {
   return (
     <Wrapper>
       <MessageList>
-        {Mockdata.messages.map((v, i) => (
+        {chatInfo.messages.length === 0 && <EmptyList>무엇을 도와드릴까요?</EmptyList>}
+        {chatInfo.messages.map((v, i) => (
           <div key={i}>
             {i % 2 === 0 ? (
               <UserMessage>{v.contents}</UserMessage>
@@ -76,16 +68,25 @@ const Wrapper = styled.div`
 `;
 
 const MessageList = styled.ul`
-  width: 70%;
+  width: min(70%, 768px);
   height: calc(100vh - 135px);
   overflow-y: auto;
   padding: 12px 36px;
   place-content: end;
+  & div {
+    margin: 8px 0;
+  }
+`;
+
+const EmptyList = styled.h2`
+  display: flex;
+  justify-content: center;
+  margin: 0;
 `;
 
 const UserMessage = styled.li`
   width: fit-content;
-  max-width: 70%;
+  max-width: 100%;
   padding: 16px;
   background: #f9f9f9;
   border-radius: 12px;
@@ -94,14 +95,14 @@ const UserMessage = styled.li`
 
 const BotMessage = styled.li`
   width: fit-content;
-  max-width: 70%;
+  max-width: 100%;
   padding: 16px;
   background: #f9f9f9;
   border-radius: 12px;
 `;
 
 const InputWrapper = styled.div`
-  width: calc(70% + 48px);
+  width: min(70%, 768px);
   display: flex;
   align-items: center;
   margin-top: 12px;
