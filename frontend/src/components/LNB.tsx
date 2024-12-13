@@ -1,5 +1,7 @@
 import React from 'react';
 
+import MenuIcon from '@mui/icons-material/MenuOpen';
+
 import styled from 'styled-components';
 
 interface LNBProps {
@@ -10,7 +12,11 @@ interface LNBProps {
 const LNB: React.FC<LNBProps> = ({ isLnbOpen, toggleLnb }) => {
   return (
     <LnbWrapper isLnbOpen={isLnbOpen}>
-      {isLnbOpen && <ToggleButton onClick={toggleLnb}>닫기버튼</ToggleButton>}
+      {isLnbOpen && (
+        <ToggleButton onClick={toggleLnb}>
+          <MenuIcon />
+        </ToggleButton>
+      )}
     </LnbWrapper>
   );
 };
@@ -25,11 +31,16 @@ const LnbWrapper = styled.nav<{ isLnbOpen: boolean }>`
   transition: width 0.3s;
 `;
 
-const ToggleButton = styled.button`
+const ToggleButton = styled.div`
+  cursor: pointer;
   width: auto;
   height: 36px;
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  margin: 24px 12px 24px auto;
+  margin: 18px 18px 24px 24px;
+  :hover {
+    border-radius: 4px;
+    background: #e3e3e3;
+  }
 `;
