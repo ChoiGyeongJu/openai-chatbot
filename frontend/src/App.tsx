@@ -48,6 +48,13 @@ const ChatApp: React.FC = () => {
   };
 
   useEffect(() => {
+    // 초기 chatList 세팅
+    const data = localStorage.getItem('messageList');
+    const messageList: Chat[] = data ? JSON.parse(data) : [];
+    setChatList(messageList);
+  }, []);
+
+  useEffect(() => {
     if (!chatId) {
       setChatInfo({
         id: -1,
@@ -61,7 +68,7 @@ const ChatApp: React.FC = () => {
 
   return (
     <Wrapper>
-      <LNB isLnbOpen={isLnbOpen} toggleLnb={toggleLnb} />
+      <LNB isLnbOpen={isLnbOpen} chatList={chatList} toggleLnb={toggleLnb} />
       {!isLnbOpen && (
         <ToggleButton onClick={toggleLnb}>
           <MenuIcon />

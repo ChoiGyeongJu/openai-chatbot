@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import MenuIcon from '@mui/icons-material/MenuOpen';
 import WriteIcon from '@mui/icons-material/MessageRounded';
@@ -9,28 +10,24 @@ import { Chat } from '../types/chat';
 
 interface LNBProps {
   isLnbOpen: boolean;
+  chatList: Chat[];
   toggleLnb: () => void;
 }
 
-const Mockdata: Chat[] = [
-  {
-    id: 1,
-    title: '테스트 제목1',
-    messages: [],
-  },
-  {
-    id: 2,
-    title: '테스트 제목2',
-    messages: [],
-  },
-  {
-    id: 3,
-    title: '테스트 제목3',
-    messages: [],
-  },
-];
+const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, toggleLnb }) => {
+  const nav = useNavigate();
+  const { chatId } = useParams();
 
-const LNB: React.FC<LNBProps> = ({ isLnbOpen, toggleLnb }) => {
+  const handleClickNewChat = () => {
+    if (!chatId) return;
+    nav(`/chat`);
+  };
+
+  const handleClickChat = (id: number) => {
+    if (id === Number(chatId)) return;
+    nav(`/chat/${id}`);
+  };
+
   return (
     <LnbWrapper isLnbOpen={isLnbOpen}>
       {isLnbOpen && (
@@ -39,13 +36,19 @@ const LNB: React.FC<LNBProps> = ({ isLnbOpen, toggleLnb }) => {
             <div onClick={toggleLnb}>
               <MenuIcon />
             </div>
-            <div>
+            <div onClick={handleClickNewChat}>
               <WriteIcon />
             </div>
           </ButtonWrapper>
           <ChatList>
-            {Mockdata.map((v, i) => (
-              <ChatItem key={i}>{v.title}</ChatItem>
+            {chatList.map((v, i) => (
+              <ChatItem
+                key={i}
+                isActive={v.id === Number(chatId)}
+                onClick={() => handleClickChat(v.id)}
+              >
+                {v.messages[0].contents}
+              </ChatItem>
             ))}
           </ChatList>
         </>
@@ -95,7 +98,7 @@ const ChatList = styled.ul`
   }
 `;
 
-const ChatItem = styled.li`
+const ChatItem = styled.li<{ isActive: boolean }>`
   cursor: pointer;
   padding: 12px 4px;
   border-radius: 12px;
@@ -103,4 +106,5 @@ const ChatItem = styled.li`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: ${props => props.isActive && '#e3e3e3'};
 `;
