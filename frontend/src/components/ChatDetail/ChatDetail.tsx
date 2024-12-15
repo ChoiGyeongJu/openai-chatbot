@@ -4,8 +4,8 @@ import Spinner from '@mui/material/CircularProgress';
 
 import styled from 'styled-components';
 
-import { is_mobile } from '../common/constants';
-import { Chat } from '../types/chat';
+import { is_mobile } from '../../common/constants';
+import { Chat } from '../../types/chat';
 
 interface Props {
   isLoading: boolean;

@@ -26,8 +26,8 @@ const ChatApp: React.FC = () => {
     setIsLnbOpen(!isLnbOpen);
   };
 
-  const handleFetchResponse = async (message: string, messageList: Chat[]) => {
-    const currentChat = messageList.find(v => v.id === Number(chatId));
+  const handleFetchResponse = async (id: number, message: string, messageList: Chat[]) => {
+    const currentChat = messageList.find(v => v.id === id);
     if (!currentChat) return;
 
     try {
@@ -49,12 +49,20 @@ const ChatApp: React.FC = () => {
   const handleSendMessage = (message: string) => {
     const data = localStorage.getItem('messageList');
     const messageList: Chat[] = data ? JSON.parse(data) : [];
+    let currentId = Number(chatId);
 
     if (!chatId) {
       // 새 채팅 시작
-      nav(`/chat/${messageList.length}`);
+      let newId: number;
+      if (messageList.length === 0) {
+        newId = 0;
+      } else {
+        newId = messageList[messageList.length - 1].id + 1;
+      }
+      nav(`/chat/${newId}`);
+      currentId = newId;
       messageList.push({
-        id: messageList.length,
+        id: newId,
         messages: [{ contents: message }],
       });
     } else {
@@ -65,7 +73,8 @@ const ChatApp: React.FC = () => {
         setChatInfo(currentChat);
       }
     }
-    handleFetchResponse(message, messageList);
+    setChatList(messageList);
+    handleFetchResponse(currentId, message, messageList);
   };
 
   useEffect(() => {
@@ -92,7 +101,12 @@ const ChatApp: React.FC = () => {
 
   return (
     <Wrapper>
-      <LNB isLnbOpen={isLnbOpen} chatList={chatList} toggleLnb={toggleLnb} />
+      <LNB
+        isLnbOpen={isLnbOpen}
+        chatList={chatList}
+        setChatList={setChatList}
+        toggleLnb={toggleLnb}
+      />
       {!isLnbOpen && (
         <ToggleButton onClick={toggleLnb}>
           <MenuIcon />

@@ -1,23 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import MenuIcon from '@mui/icons-material/MenuOpen';
 import WriteIcon from '@mui/icons-material/MessageRounded';
 
 import styled from 'styled-components';
 
-import { is_mobile } from '../common/constants';
-import { Chat } from '../types/chat';
+import { is_mobile } from '../../common/constants';
+import { Chat } from '../../types/chat';
+import { ConfirmModal } from './ConfirmModal';
 
 interface LNBProps {
   isLnbOpen: boolean;
   chatList: Chat[];
+  setChatList: (chatList: Chat[]) => void;
   toggleLnb: () => void;
 }
 
-const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, toggleLnb }) => {
+const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, setChatList, toggleLnb }) => {
   const nav = useNavigate();
   const { chatId } = useParams();
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [hoverIndex, setHoverIndex] = useState<null | number>(null);
+  const [deleteId, setDeleteId] = useState<null | number>(null);
 
   const handleClickNewChat = () => {
     if (!chatId) return;
@@ -29,6 +36,22 @@ const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, toggleLnb }) => {
     if (id === Number(chatId)) return;
     nav(`/chat/${id}`);
     if (is_mobile) toggleLnb();
+  };
+
+  const handleOpenModal = (id: number) => {
+    setDeleteId(id);
+    setOpen(true);
+  };
+
+  const handleClickDelete = () => {
+    const data = localStorage.getItem('messageList');
+    const messageList: Chat[] = data ? JSON.parse(data) : [];
+    const updatedList = messageList.filter(v => v.id !== deleteId);
+    setChatList(updatedList);
+    setDeleteId(null);
+    setOpen(false);
+    localStorage.setItem('messageList', JSON.stringify(updatedList));
+    if (deleteId === Number(chatId)) nav('/chat');
   };
 
   return (
@@ -48,15 +71,23 @@ const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, toggleLnb }) => {
               <ChatItem
                 key={i}
                 isActive={v.id === Number(chatId)}
+                onMouseEnter={() => setHoverIndex(v.id)}
+                onMouseLeave={() => setHoverIndex(null)}
                 onClick={() => handleClickChat(v.id)}
               >
-                {v.messages[0].contents}
+                <span>{v.messages[0].contents}</span>
+                {hoverIndex === v.id && (
+                  <div onClick={() => handleOpenModal(v.id)}>
+                    <DeleteIcon />
+                  </div>
+                )}
               </ChatItem>
             ))}
           </ChatList>
           {chatList.length === 0 && <EmptyList>진행중인 채팅방이 없습니다.</EmptyList>}
         </>
       )}
+      <ConfirmModal open={open} onClose={() => setOpen(false)} onConfirm={handleClickDelete} />
     </LnbWrapper>
   );
 };
@@ -99,7 +130,7 @@ const ButtonWrapper = styled.div`
 const ChatList = styled.ul`
   width: 100%;
   padding: 0;
-  overflow-y: auto;
+  overflow: hidden auto;
   :hover {
     background: #e3e3e3;
   }
@@ -114,12 +145,22 @@ const EmptyList = styled.div`
 
 const ChatItem = styled.li<{ isActive: boolean }>`
   cursor: pointer;
+  width: 203px;
   padding: 12px 4px;
   border-radius: 12px;
   margin: 8px 0;
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: flex;
   background: ${props => props.isActive && '#e3e3e3'};
+  & span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  & div {
+    display: flex;
+    margin-left: auto;
+  }
+  @media (max-width: 675px) {
+    width: 92%;
+  }
 `;

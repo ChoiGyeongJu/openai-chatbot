@@ -1,2 +1,2 @@
-export { default as ChatDetail } from './ChatDetail';
-export { default as LNB } from './LNB';
+export { ChatDetail } from './ChatDetail';
+export { LNB } from './LNB';
