@@ -96,6 +96,12 @@ const MessageList = styled.ul`
     margin: 8px auto;
     width: min(70%, 768px);
   }
+  @media (max-width: 675px) {
+    width: 90%;
+    & div {
+      width: 90%;
+    }
+  }
   &::-webkit-scrollbar {
     width: 12px;
     background-color: transparent;
@@ -152,6 +158,9 @@ const InputWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 12px;
+  @media (max-width: 675px) {
+    width: 90%;
+  }
 `;
 
 const StyledInput = styled.textarea`

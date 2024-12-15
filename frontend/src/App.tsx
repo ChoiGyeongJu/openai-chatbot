@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import styled from 'styled-components';
 
 import { fetchOpenAIResponse } from './common/api';
+import { is_mobile } from './common/constants';
 import { ChatDetail, LNB } from './components';
 import { Chat } from './types/chat';
 
@@ -13,7 +14,7 @@ const ChatApp: React.FC = () => {
   const nav = useNavigate();
   const { chatId } = useParams();
 
-  const [isLnbOpen, setIsLnbOpen] = useState<boolean>(true);
+  const [isLnbOpen, setIsLnbOpen] = useState<boolean>(!is_mobile);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [chatList, setChatList] = useState<Chat[]>([]);
   const [chatInfo, setChatInfo] = useState<Chat>({
@@ -120,5 +121,8 @@ const ToggleButton = styled.div`
   :hover {
     border-radius: 4px;
     background: #e3e3e3;
+  }
+  @media (max-width: 675px) {
+    position: fixed;
   }
 `;

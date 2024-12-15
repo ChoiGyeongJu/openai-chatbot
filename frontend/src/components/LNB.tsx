@@ -6,6 +6,7 @@ import WriteIcon from '@mui/icons-material/MessageRounded';
 
 import styled from 'styled-components';
 
+import { is_mobile } from '../common/constants';
 import { Chat } from '../types/chat';
 
 interface LNBProps {
@@ -21,11 +22,13 @@ const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, toggleLnb }) => {
   const handleClickNewChat = () => {
     if (!chatId) return;
     nav(`/chat`);
+    if (is_mobile) toggleLnb();
   };
 
   const handleClickChat = (id: number) => {
     if (id === Number(chatId)) return;
     nav(`/chat/${id}`);
+    if (is_mobile) toggleLnb();
   };
 
   return (
@@ -68,6 +71,11 @@ const LnbWrapper = styled.nav<{ isLnbOpen: boolean }>`
   display: flex;
   flex-direction: column;
   transition: width 0.3s;
+
+  @media (max-width: 675px) {
+    position: fixed;
+    width: ${props => (props.isLnbOpen ? '70%' : '0px')};
+  }
 `;
 
 const ButtonWrapper = styled.div`
