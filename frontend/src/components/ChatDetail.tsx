@@ -4,6 +4,7 @@ import Spinner from '@mui/material/CircularProgress';
 
 import styled from 'styled-components';
 
+import { is_mobile } from '../common/constants';
 import { Chat } from '../types/chat';
 
 interface Props {
@@ -65,7 +66,7 @@ const ChatDetail: React.FC<Props> = ({ isLoading, chatInfo, onMessageSend }) => 
       </MessageList>
       <InputWrapper>
         <StyledInput
-          placeholder="메시지를 입력하세요."
+          placeholder={is_mobile ? '' : '메시지를 입력하세요.'}
           value={message}
           onChange={handleMessageChange}
           onKeyDown={handleKeyDown}
@@ -96,22 +97,25 @@ const MessageList = styled.ul`
     margin: 8px auto;
     width: min(70%, 768px);
   }
+  @media (min-width: 675px) {
+    &::-webkit-scrollbar {
+      width: 12px;
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      opacity: 1;
+      background-color: #bdbdbd;
+    }
+  }
+
   @media (max-width: 675px) {
     width: 90%;
     & div {
       width: 90%;
     }
-  }
-  &::-webkit-scrollbar {
-    width: 12px;
-    background-color: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-clip: padding-box;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    opacity: 1;
-    background-color: #bdbdbd;
   }
 `;
 

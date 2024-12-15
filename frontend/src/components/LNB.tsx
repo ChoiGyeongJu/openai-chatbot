@@ -98,9 +98,8 @@ const ButtonWrapper = styled.div`
 
 const ChatList = styled.ul`
   width: 100%;
-  display: flex;
-  flex-direction: column;
   padding: 0;
+  overflow-y: auto;
   :hover {
     background: #e3e3e3;
   }
@@ -117,6 +116,7 @@ const ChatItem = styled.li<{ isActive: boolean }>`
   cursor: pointer;
   padding: 12px 4px;
   border-radius: 12px;
+  margin: 8px 0;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
