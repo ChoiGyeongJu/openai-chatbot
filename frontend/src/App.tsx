@@ -36,12 +36,12 @@ const ChatApp: React.FC = () => {
       currentChat.messages.push({ contents: response });
       setChatInfo(currentChat);
       setChatList(messageList);
-      localStorage.setItem('messageList', JSON.stringify(messageList));
     } catch (error) {
       currentChat.messages.push({
         contents: '응답을 받아오는 중 에러가 발생했습니다. 다시 요청해주세요.',
       });
     } finally {
+      localStorage.setItem('messageList', JSON.stringify(messageList));
       setIsLoading(false);
     }
   };
