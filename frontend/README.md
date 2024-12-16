@@ -1,50 +1,45 @@
-# React + TypeScript + Vite
+# OpenAI 챗봇 프로젝트
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/2b05bedb-f00f-4089-b7a8-b90a9dc29e1c" width="600" alt="Portfolio Home">
+</p>
 
-Currently, two official plugins are available:
+<br>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📝 프로젝트 소개
 
-## Expanding the ESLint configuration
+<p align="justify">
+  openAI의 api를 사용하여, chat gpt 3.5 turbo 버전의 챗봇을 구현하였습니다. <br>
+  PC 및 모바일에서 모두 원활하게 작동하도록 반응형으로 개발하였습니다. <br>
+</p>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+<br>
 
-- Configure the top-level `parserOptions` property like this:
+## ⭐ 구현 기능
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### 🔹 LNB와 채팅 영역 분리
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/68dddf5b-d696-4bc0-8838-fa20a103f9c2" width="700">
+</p>
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+<br>
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### 🔹 채팅 삭제 기능
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/2be83841-0019-418f-ad2e-41e609e55a88" width="500">
+</p>
+<p>LNB 영역의 채팅 hover로 삭제 기능 제공.</p>
+
+<br>
+
+### 🔹 모바일뷰
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/e7aefde6-9794-4f46-adfc-7b4656a0ef4e" width="500">
+  <img src="https://github.com/user-attachments/assets/fc233ed5-f736-4517-a259-df4fc33840c3" width="500">
+</p>
+
+<br>
+
