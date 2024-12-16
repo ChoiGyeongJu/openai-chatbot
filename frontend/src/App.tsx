@@ -22,10 +22,6 @@ const ChatApp: React.FC = () => {
     messages: [],
   });
 
-  const toggleLnb = () => {
-    setIsLnbOpen(!isLnbOpen);
-  };
-
   const handleFetchResponse = async (id: number, message: string, messageList: Chat[]) => {
     const currentChat = messageList.find(v => v.id === id);
     if (!currentChat) return;
@@ -105,10 +101,10 @@ const ChatApp: React.FC = () => {
         isLnbOpen={isLnbOpen}
         chatList={chatList}
         setChatList={setChatList}
-        toggleLnb={toggleLnb}
+        setIsLnbOpen={setIsLnbOpen}
       />
       {!isLnbOpen && (
-        <ToggleButton onClick={toggleLnb}>
+        <ToggleButton onClick={() => setIsLnbOpen(true)}>
           <MenuIcon />
         </ToggleButton>
       )}

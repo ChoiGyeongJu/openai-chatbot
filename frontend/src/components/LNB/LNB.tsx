@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
@@ -15,27 +15,26 @@ interface LNBProps {
   isLnbOpen: boolean;
   chatList: Chat[];
   setChatList: (chatList: Chat[]) => void;
-  toggleLnb: () => void;
+  setIsLnbOpen: (open: boolean) => void;
 }
 
-const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, setChatList, toggleLnb }) => {
+const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, setChatList, setIsLnbOpen }) => {
   const nav = useNavigate();
   const { chatId } = useParams();
 
+  const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [hoverIndex, setHoverIndex] = useState<null | number>(null);
   const [deleteId, setDeleteId] = useState<null | number>(null);
 
   const handleClickNewChat = () => {
-    if (!chatId) return;
-    nav(`/chat`);
-    if (is_mobile) toggleLnb();
+    if (chatId) nav(`/chat`);
+    if (is_mobile) setIsLnbOpen(false);
   };
 
   const handleClickChat = (id: number) => {
-    if (id === Number(chatId)) return;
-    nav(`/chat/${id}`);
-    if (is_mobile) toggleLnb();
+    if (id !== Number(chatId)) nav(`/chat/${id}`);
+    if (is_mobile) setIsLnbOpen(false);
   };
 
   const handleOpenModal = (id: number) => {
@@ -54,12 +53,23 @@ const LNB: React.FC<LNBProps> = ({ isLnbOpen, chatList, setChatList, toggleLnb }
     if (deleteId === Number(chatId)) nav('/chat');
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (is_mobile) setIsLnbOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <LnbWrapper isLnbOpen={isLnbOpen}>
+    <LnbWrapper ref={ref} isLnbOpen={isLnbOpen}>
       {isLnbOpen && (
         <>
           <ButtonWrapper>
-            <div onClick={toggleLnb}>
+            <div onClick={() => setIsLnbOpen(false)}>
               <MenuIcon />
             </div>
             <div onClick={handleClickNewChat}>
