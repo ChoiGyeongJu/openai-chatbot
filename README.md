@@ -1,3 +1,7 @@
+## 📄 Page URL
+[페이지 방문하기!](https://chat-jupt.vercel.app)
+
+
 # 🔹 React + Express 기반 OpenAI Chat 프로젝트
 <p align="left">
   <img src="https://github.com/user-attachments/assets/2b05bedb-f00f-4089-b7a8-b90a9dc29e1c" width="600" alt="Portfolio Home">
