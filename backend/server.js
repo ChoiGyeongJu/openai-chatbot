@@ -54,3 +54,5 @@ app.post("/api/chat", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT} 서버가 실행중입니다.`);
 });
+
+module.exports = app;
