@@ -13,6 +13,7 @@
 ## 🛠️ 기술 스택
 - **Frontend**: React, TypeScript
 - **Backend**: Express, Node.js
+- **Desktop App**: Electron
 - **UI Library**: Material-UI (MUI)
 - **API**: OpenAI GPT
 - **Storage**: LocalStorage
@@ -33,6 +34,9 @@
 4. **경량화된 서버**  
    - Express 기반의 단순한 서버에서 OpenAI와 통신 처리.
 
+4. **일렉트론 App**  
+   - electron을 사용해 데스크톱 앱 배포. 
+
 ---
 
 # 서버 실행
@@ -43,4 +47,10 @@ node server.js
 # 클라이언트 실행
 <pre><code>cd frontend
 yarn dev
+</code></pre>
+
+# 일렉트론 실행 및 배포
+<pre><code>
+npm start  // electron 실행
+npm run app:build  // electron 앱 빌드
 </code></pre>
