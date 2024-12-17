@@ -50,7 +50,6 @@ yarn dev
 </code></pre>
 
 # 일렉트론 실행 및 배포
-<pre><code>
-npm start  // electron 실행
+<pre><code>npm start  // electron 실행
 npm run app:build  // electron 앱 빌드
 </code></pre>
