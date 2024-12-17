@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
 
 import App from '../App';
 
 const router = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        <Route path="*" element={<Navigate to={'/chat'} replace />} />
+        <Route path="*" element={<Navigate to={'/'} replace />} />
+        <Route path="/" element={<App />} />
         <Route path="/chat/:chatId?" element={<App />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
