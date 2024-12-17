@@ -1,0 +1,13 @@
+{
+  "name": "chat-jupt",
+  "version": "1.0.0-test1",
+  "main": "./main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^25.1.8"
+  }
+}
