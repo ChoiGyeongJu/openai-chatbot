@@ -50,6 +50,42 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
+app.post("/api/notion", async (req, res) => {
+  const {
+    pageId,
+    limit = 100,
+    chunkNumber = 0,
+    cursor = { stack: [] },
+  } = req.body;
+
+  if (!pageId) {
+    return res.status(400).json({ error: "pageId는 필수입니다." });
+  }
+
+  try {
+    const response = await axios.post(
+      "https://www.notion.so/api/v3/loadPageChunk",
+      {
+        pageId,
+        limit,
+        chunkNumber,
+        cursor,
+        verticalColumns: false,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Notion API Error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch data from Notion API" });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT} 서버가 실행중입니다.`);
